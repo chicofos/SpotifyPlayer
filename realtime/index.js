@@ -1,7 +1,6 @@
 const socketio = require('socket.io');
-var SpotifyWebApi = require('spotify-web-api-js');
-
-var spotifyApi = new SpotifyWebApi();
+var nodeSpotifyWebHelper = require('node-spotify-webhelper');
+var spotify = new nodeSpotifyWebHelper.SpotifyWebHelper();
 
 module.exports = function(server){
 
@@ -12,10 +11,8 @@ module.exports = function(server){
     socket.emit('init');
     
     socket.on('setToken', function(data){
-      if(data.token != "")
-        spotifyApi.setAccessToken(data.token);
+      console.log(data)
     });
-
 
   });
 
