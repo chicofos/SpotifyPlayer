@@ -31,16 +31,19 @@
     transition: all 0.25s ease;
   }
 
+
+
   .btn-control {
     background-color: transparent;
     border-radius: 1em;
     border: 0.2em solid #3168a0;
     color: #3168a0;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 12px;
     padding: 0.7em 1.5em;
     text-transform: uppercase;
     transition: all 0.25s ease;
+    outline: none;
   }
   
   .btn-control:hover{
@@ -128,8 +131,8 @@
     align-items: center;
     display: flex;
     justify-content: center;
+    padding-top: 5%;
 
-    border: 1px solid white;
   }
   
   .main-container {

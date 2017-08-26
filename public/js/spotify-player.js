@@ -23,16 +23,21 @@ class SpotifyPlayer {
     }
   }
 
-  init() {
-    this.fetchToken().then(r => r.json()).then(json => {
-      this.accessToken = json['access_token'];
-      //this.expiresIn = json['expires_in'];
+  init(token) {
+    if(token != ""){
+      this.accessToken = token;
       this._onNewAccessToken();
-    });
+    }
+    else {
+      this.fetchToken().then(r => r.json()).then(json => {
+        this.accessToken = json['access_token'];
+        this.expiresIn = json['expires_in'];
+        this._onNewAccessToken();
+      });
   }
+}
 
   fetchToken() {
-    debugger;
     this.obtainingToken = true;
     return fetch(`${this.exchangeHost}/token`, {
       method: 'POST',
@@ -91,7 +96,6 @@ class SpotifyPlayer {
 
   login() {
     return new Promise((resolve, reject) => {
-      debugger;
       const getLoginURL = scopes => {
 
         var CLIENT_ID = 'c98fa7f017a847008932e13964ad862f';
@@ -126,10 +130,10 @@ class SpotifyPlayer {
               this.expiresIn = hash.expires_in;
               localStorage.setItem('access_token', hash.access_token);
               this._onNewAccessToken();
-              if (this.accessToken === '') {
+              if (this.accessToken == null) {
                 reject();
               } else {
-                const refreshToken = hash.refresh_token;
+                const refreshToken = hash.access_token;
                 localStorage.setItem('refreshToken', refreshToken);
                 resolve(hash.access_token);
               }
@@ -160,17 +164,15 @@ class SpotifyPlayer {
     });
   }
 
-  fetchPost(url) {
+  fetchWrapper(url, method) {
     let fetchData = { 
-      method: 'POST', 
+      method: method, 
       body: { device_id : this.device_id },
       headers: { 
         Accept: "application/json",
         Authorization: 'Bearer ' + this.accessToken
        }
     }
-
-
     return fetch(url, fetchData);
   }
 
@@ -205,8 +207,22 @@ class SpotifyPlayer {
   }
 
   nextSong(){
-    debugger;
-    return this.fetchPost('https://api.spotify.com/v1/me/player/next')
+    return this.fetchWrapper('https://api.spotify.com/v1/me/player/next','POST')
+      .then(data => data.json)
+  }
+
+  previousSong(){
+    return this.fetchWrapper('https://api.spotify.com/v1/me/player/previous','POST')
+      .then(data => data.json)
+  }
+
+  pauseSong(){
+    return this.fetchWrapper('https://api.spotify.com/v1/me/player/pause','PUT')
+      .then(data => data.json)
+  }
+
+  playSong(){
+    return this.fetchWrapper('https://api.spotify.com/v1/me/player/play','PUT')
       .then(data => data.json)
   }
 

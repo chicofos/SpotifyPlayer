@@ -2,7 +2,7 @@
 var SpotifyWebApi = require('spotify-web-api-node');
 var spotifyApi = new SpotifyWebApi();
 
-module.exports = function(app, session){
+module.exports = function(app){
 
   
   app.get('/', onRequest);
@@ -18,21 +18,12 @@ module.exports = function(app, session){
   }
 
  function setToken(req,res){
-    var access_token = req.body.access_token;
-    var refresh_token = req.body.refresh_token;
-    var token = null;
+    var token = req.body.refresh_token;
 
-    if(refresh_token == "undefined"){
-      if(access_token == null)
-          res.end(JSON.stringify({ access_token: null, message: 'token undefined' }));
-      else
-          token = access_token
-    }
-    else
-      token = refresh_token;
+    if(token == "undefined") 
+      res.end(JSON.stringify({ access_token: null, message: 'token undefined' }));
 
     spotifyApi.setAccessToken(token);
-    session.token = token;
     res.end(JSON.stringify({ access_token: token, message: 'token saved' }));
   }
 

@@ -10,10 +10,14 @@
         </div>
         <div class="main-container hidden" id="js-main-container"></div>
     </div>
-    <div class="controls">
-        <button class="btn-control" id="next">Next</button>
+    <div class="controls" hidden>
+        <button class="btn-control" id="backward"><i class="fa fa-backward" aria-hidden="true"></i></i></button>
+        <button class="btn-control" id="play"><i class="fa fa-play" aria-hidden="true"></i></button>
+        <button class="btn-control" id="pause"><i class="fa fa-pause" aria-hidden="true"></i></button>
+        <button class="btn-control" id="forward"><i class="fa fa-forward" aria-hidden="true"></i></button>
     </div>
 </body>
 
+<input type="text" value="<%= token %>" id="token-reusable" hidden/>
 
 <% include footer.html %>
